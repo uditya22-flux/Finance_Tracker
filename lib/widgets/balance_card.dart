@@ -1,90 +1,81 @@
 import 'package:flutter/material.dart';
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({super.key});
+  final double income;
+  final double expense;
+  final double pocketMoney;
+
+  const BalanceCard({
+    super.key,
+    required this.income,
+    required this.expense,
+    required this.pocketMoney,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Total Balance',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              '₹ 0',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
+    final total = income + pocketMoney - expense;
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                _BalanceItem(
-                  label: 'Income',
-                  amount: '₹ 0',
-                  color: Colors.green,
-                ),
-                _BalanceItem(
-                  label: 'Pocket',
-                  amount: '₹ 0',
-                  color: Colors.blue,
-                ),
-                _BalanceItem(
-                  label: 'Expense',
-                  amount: '₹ 0',
-                  color: Colors.red,
-                ),
-              ],
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Total Balance',
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '₹ ${total.toStringAsFixed(0)}',
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _Item('Income', income, Colors.green),
+              _Item('Pocket', pocketMoney, Colors.blue),
+              _Item('Expense', expense, Colors.red),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
-class _BalanceItem extends StatelessWidget {
+class _Item extends StatelessWidget {
   final String label;
-  final String amount;
+  final double value;
   final Color color;
 
-  const _BalanceItem({
-    required this.label,
-    required this.amount,
-    required this.color,
-  });
+  const _Item(this.label, this.value, this.color);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: Colors.grey)),
         const SizedBox(height: 4),
         Text(
-          amount,
+          '₹ ${value.toStringAsFixed(0)}',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: color,
@@ -94,4 +85,3 @@ class _BalanceItem extends StatelessWidget {
     );
   }
 }
-
